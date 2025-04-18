@@ -7,6 +7,15 @@ const public_users = express.Router();
 
 public_users.post("/register", (req,res) => {
   //Write your code here
+  const author = req.body.author;
+  const password = req.body.password;
+
+  if (!isValid(author)) {
+    users.push({"author": author, "password": password})
+    res.status(200).json(user)
+  } else {
+    res.status(208).json({message: "aurhor is already register"})
+  }
   return res.status(300).json({message: "Yet to be implemented"});
 });
 
@@ -51,35 +60,38 @@ public_users.get('/isbn/:isbn',function (req, res) {
     }
 });
 
-// Get book details based on author
-// public_users.get('/author/:author',function (req, res) {
-//   //Write your code here
-//   const author = req.params.author;
-
-//   let authorKey = Object.values(books[1]).filter((book)=>{
-//     return book["author"] === author;
-//   })
-//   res.send(authorKey)
-// //   for (let index = 0; index < books.length; index++) {
-// //     const element = books[index];
-// //     res.send(element)
-// //   }
-// // books.map((book)=>{
-// //     res.send(book[author])
-// // })
-//   return res.status(300).json({message: "erreur"});
-// });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const title = req.params.title;
+  const titleKey = Object.keys(books)
+
+  const titleTable = []
+  titleKey.forEach(key =>{
+    const book = books[key];
+    if (book["title"].toLowerCase() === title.toLowerCase()) {
+        titleTable.push(book)
+    }
+  })
+  if (titleTable.length > 0) {
+    res.status(200).json({titleTable})
+  } 
+  return res.status(300).json({message: "il y'a pas ce titre dans le livre!!!"});
 });
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const isbn = req.params.isbn;
+
+  const review = Object.values(books).filter((book)=>{
+    book["reviews"] === isbn
+  })
+  if (review) {
+    res.status(200).json(review)
+  }
+  return res.status(300).json({message: "il n'existe pas de crétique!!!"});
 });
 
 module.exports.general = public_users;

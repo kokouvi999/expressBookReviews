@@ -7,16 +7,23 @@ const public_users = express.Router();
 
 public_users.post("/register", (req,res) => {
   //Write your code here
-  const author = req.body.author;
-  const password = req.body.password;
+//   const username = req.body.username;
+//   const password = req.body.password;
 
-  if (!isValid(author)) {
-    users.push({"author": author, "password": password})
-    res.status(200).json(user)
-  } else {
-    res.status(208).json({message: "aurhor is already register"})
+  const {username, password} = req.body
+
+  if (!username || !password) {
+    res.status(400).json({message: "le non d'utilisateur et le mot de passe requis"})
   }
-  return res.status(300).json({message: "Yet to be implemented"});
+  
+  if (!isValid(username)) {
+    users.push({username, password})
+    // users.push({"usename": username, "password": password})
+    res.status(200).json({users})
+  } else {
+    res.status(409).json({message: "user is already register"})
+  }
+//   return res.status(300).json({message: "Veillez fourni un non d'utilisateur!!!"});
 });
 
 // Get the book list available in the shop
